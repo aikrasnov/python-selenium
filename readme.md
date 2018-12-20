@@ -7,6 +7,11 @@
 4) pipenv shell
 5) pytest
 
+### Sauce Lab
+1) Do all the same (except installing drivers)
+2) Set environments var SAUCE_USERNAME and SAUCE_ACCESS_KEY
+3) pytest
+
 ### Change count parallel tests
 `pytest -n number`
 
