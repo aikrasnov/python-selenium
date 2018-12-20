@@ -16,8 +16,8 @@ def driver(request, param):
     access_key = None
 
     try:
-        username = "aikrasnov" # os.environ["SAUCE_USERNAME"]
-        access_key = "e6968af3-55c0-455e-b712-f6ef086f5640" # os.environ["SAUCE_ACCESS_KEY"]
+        username = os.environ["SAUCE_USERNAME"]
+        access_key = os.environ["SAUCE_ACCESS_KEY"]
     except KeyError:
         pass
 
