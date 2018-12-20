@@ -3,9 +3,9 @@ from selenium.webdriver.remote.webdriver import WebDriver
 
 
 class Wait(object):
-    def __init__(self, browser: WebDriver):
+    def __init__(self, browser: WebDriver, timeout=10):
         self.__browser = browser
-        self.__timeout = 10
+        self.__timeout = timeout
         self.__wait = WebDriverWait(self.__browser, self.__timeout)
 
     def wait_until_visible_by_css_selector(self, selector: str):

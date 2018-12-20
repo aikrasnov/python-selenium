@@ -1,19 +1,19 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from src.wait.wait import Wait
+from config.config import BASE_URL
 
 
 class GoMailRu(object):
     def __init__(self, browser: WebDriver):
-        self.__URL = 'https://go.mail.ru'
         self.__browser = browser
         self.__wait = Wait(self.__browser)
-        self.__browser.get(self.__URL)
+        self.__browser.get(BASE_URL)
 
         self.__query_input = '#q'
         self.__suggest_select = '.go-suggests__wrap'
         self.__suggest_select_item = '.go-suggests__item__text'
 
-    def enter_query(self, query):
+    def enter_query(self, query: str):
         self.__wait.wait_until_visible_by_css_selector(self.__query_input)
         self.__browser.find_element_by_css_selector(self.__query_input).click()
         self.__browser.find_element_by_css_selector(self.__query_input).send_keys(query)

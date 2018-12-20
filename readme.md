@@ -3,4 +3,4 @@
 2) Install pipenv ([instruction](https://github.com/pypa/pipenv#installation))
 3) pipenv install --dev
 4) pipenv shell
-4) pytest
+5) pytest

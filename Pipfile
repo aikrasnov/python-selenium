@@ -1,14 +1,15 @@
+[requires]
+python_full_version = "3.7"
+
 [[source]]
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "==2.2.0"
+flake8 = "==3.6.0"
+flake8-quotes = "1.0.0"
 
 [packages]
 selenium = "==3.141.0"
 pytest = "==4.0.1"
-
-[requires]
-python_version = "3.7"
