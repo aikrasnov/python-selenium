@@ -32,15 +32,15 @@ def param(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption("-B", "--browser",
+    parser.addoption("--browser",
                      action="append",
                      help=f"Browser. Valid options are {AVAILABLE_BROWSERS.keys()}")
 
-    parser.addoption("-A", "--all",
+    parser.addoption("--allbrowsers",
                      default=False,
                      help="Run tests in all available browsers")
 
 
 def pytest_generate_tests(metafunc):
-    if metafunc.config.getoption("all"):
+    if metafunc.config.getoption("allbrowsers"):
         metafunc.parametrize("param", AVAILABLE_BROWSERS.keys())

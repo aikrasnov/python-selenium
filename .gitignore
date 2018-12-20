@@ -17,3 +17,5 @@ node_modules/
 /coverage
 /venv
 /.pytest_cache
+/report
+/allure-report
