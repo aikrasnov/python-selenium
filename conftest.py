@@ -42,5 +42,5 @@ def pytest_addoption(parser):
 
 
 def pytest_generate_tests(metafunc):
-    if metafunc.config.getoption('all'):
+    if metafunc.config.getoption("all"):
         metafunc.parametrize("param", AVAILABLE_BROWSERS.keys())

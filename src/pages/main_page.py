@@ -9,9 +9,9 @@ class GoMailRu(object):
         self.__wait = Wait(self.__browser)
         self.__browser.get(BASE_URL)
 
-        self.__query_input = '#q'
-        self.__suggest_select = '.go-suggests__wrap'
-        self.__suggest_select_item = '.go-suggests__item__text'
+        self.__query_input = "#q"
+        self.__suggest_select = ".go-suggests__wrap"
+        self.__suggest_select_item = ".go-suggests__item__text"
 
     def enter_query(self, query: str):
         self.__wait.wait_until_visible_by_css_selector(self.__query_input)
@@ -28,7 +28,7 @@ class GoMailRu(object):
         self.__wait.wait_until_visible_by_css_selector(self.__suggest_select_item)
         elements = self.__browser.find_elements_by_css_selector(self.__suggest_select_item)
         for element in elements:
-            assert text in element.text, f'suggest text should contain [{text}]'
+            assert text in element.text, f"suggest text should contain [{text}]"
 
     def clear_query(self):
         self.__wait.wait_until_visible_by_css_selector(self.__query_input)

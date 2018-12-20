@@ -2,9 +2,8 @@ from src.pages.main_page import GoMailRu
 import pytest
 
 
-@pytest.mark.parametrize('text', ['foobar', 'бесплатно', 'без регистрации'])
+@pytest.mark.parametrize("text", ["foobar", "бесплатно", "без регистрации"])
 def test_suggest_1(driver, text):
-    print(driver)
     page = GoMailRu(driver)
 
     input_text = text

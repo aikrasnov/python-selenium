@@ -7,9 +7,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-flake8 = "==3.6.0"
-flake8-quotes = "1.0.0"
+flake8 = "*"
+flake8-quotes = "*"
 
 [packages]
 selenium = "==3.141.0"
 pytest = "==4.0.1"
+pytest-rerunfailures = "==5.0"
+pytest-xdist = "*"
