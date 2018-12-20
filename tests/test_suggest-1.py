@@ -1,11 +1,11 @@
-from src.pages.main_page import GoMailRu
+from src.pages.main_page import MainPage
 import pytest
 
 
 @pytest.mark.parametrize("text", ["foobar", "бесплатно", "без регистрации"])
 @pytest.allure.testcase("http://test-tracker/suggest-1")
 def test_suggest_1(driver, text):
-    page = GoMailRu(driver)
+    page = MainPage(driver)
 
     input_text = text
 

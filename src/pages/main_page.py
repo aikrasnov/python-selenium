@@ -3,7 +3,7 @@ from src.wait.wait import Wait
 from config.config import BASE_URL
 
 
-class GoMailRu(object):
+class MainPage(object):
     def __init__(self, browser: WebDriver):
         self.__browser = browser
         self.__wait = Wait(self.__browser)
