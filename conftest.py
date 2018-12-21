@@ -26,6 +26,8 @@ def driver(request, param):
     command_executor = f"https://{username}:{access_key}@ondemand.saucelabs.com/wd/hub"
 
     if AVAILABLE_BROWSERS["chrome"] in browser_type:
+        # use "none" only for Chrome, because there some trouble in geckrodriver with this strategy
+        caps.update({"pageLoadStrategy": "none"})
         if has_sauce_lab:
             caps.update({"browserName": "chrome", "platform": "Windows 10", "version": "71.0"})
             browser = webdriver.Remote(desired_capabilities=caps, command_executor=command_executor)
@@ -33,6 +35,7 @@ def driver(request, param):
             browser = webdriver.Chrome(desired_capabilities=caps)
 
     elif AVAILABLE_BROWSERS["firefox"] in browser_type:
+        # caps.update({"pageLoadStrategy": "normal"})
         if has_sauce_lab:
             caps.update({"browserName": "firefox", "platform": "Windows 10", "version": "64.0"})
             browser = webdriver.Remote(desired_capabilities=caps, command_executor=command_executor)
@@ -66,5 +69,10 @@ def pytest_addoption(parser):
 
 
 def pytest_generate_tests(metafunc):
-    if metafunc.config.getoption("allbrowsers"):
+    if metafunc.config.getoption("allbrowsers") and not metafunc.config.getoption("browser"):
         metafunc.parametrize("param", AVAILABLE_BROWSERS.keys())
+
+
+# https://automated-testing.info/t/pytest-krivo-otobrazhaet-kejsy-parametrizaczii-na-russkom/17908
+def pytest_make_parametrize_id(config, val):
+    return repr(val)
