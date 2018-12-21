@@ -1,22 +1,33 @@
 [![Build Status](https://travis-ci.org/aikrasnov/python-selenium.svg?branch=master)](https://travis-ci.org/aikrasnov/python-selenium)
-## How to run UI tests
-### Local
-0) Install firefox, chrome and put theirs drivers in PATH ([chromedriver](http://chromedriver.chromium.org/), [geckodriver](https://github.com/mozilla/geckodriver/releases))
-1) Clone this repo
-2) Install pipenv ([instruction](https://github.com/pypa/pipenv#installation))
-3) pipenv install --dev
-4) pipenv shell
-5) pytest
+## Как запустить тесты
+### Локально
+0) Установить firefox, chrome и положить их драйвера в PATH ([chromedriver](http://chromedriver.chromium.org/), [geckodriver](https://github.com/mozilla/geckodriver/releases))
+1) Склонировать репу
+2) Установить pipenv ([инструкция](https://github.com/pypa/pipenv#installation))
+3) Запустить `pipenv install --dev && pipenv run pytest`
 
-### Sauce Lab
-1) Do all the same (except installing drivers)
-2) Set environments var SAUCE_USERNAME and SAUCE_ACCESS_KEY
-3) pytest
+### В Sauce Lab 
+1) Выполнить все те же шаги (кроме драйверов в PATH)
+2) Установить переменные окружения SAUCE_USERNAME and SAUCE_ACCESS_KEY
+3) Запустить тесты
 
-### Change count parallel tests
+### Изменить количество параллельных тестов
 `pytest -n number`
 
-### View beautiful reports
-1) Install allure ([instruction](https://docs.qameta.io/allure/#_installing_a_commandline))
-2) Run tests
-3) Type `allure generate report --clean && allure open allure-report`
+### Изменить браузер
+`pytest --browser firefox`
+`pytest --browser chrome`
+
+### Посмотреть отчеты
+1) Установить allure ([инструкция](https://docs.qameta.io/allure/#_installing_a_commandline))
+2) Запустить тесты
+3) Выполнить `allure generate report --clean && allure open allure-report`
+
+TODO:
+1) Публиковать отчеты по запускам в travis ci
+2) Вынести из conftest установка капабилити, создание объектов webdriver.Remote / Firefox / Chrome
+3) Кастомизировать отчеты в консоли
+4) Добавить репорты в телеграм / слак
+5) Вынести повторяющеся ошибки в отдельный модуль
+6) Вынести повторяющиеся ассерты из PO
+ 
