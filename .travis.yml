@@ -1,3 +1,5 @@
 language: python
-  python: "3.7-dev"
-  script: python --help
+python: 3.7
+dist: xenial
+sudo: true
+script: python --help
