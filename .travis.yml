@@ -10,5 +10,4 @@ sudo: true
 script:
     - pip install pipenv
     - pipenv install
-    - pipenv shell
     - pipenv run pytest
