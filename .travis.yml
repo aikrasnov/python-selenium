@@ -2,4 +2,8 @@ language: python
 python: 3.7
 dist: xenial
 sudo: true
-script: python --help
+script:
+    - pip install pipenv
+    - pipenv install
+    - pipenv shell
+    - pytest
