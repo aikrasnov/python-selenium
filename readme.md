@@ -20,4 +20,3 @@
 1) Install allure ([instruction](https://docs.qameta.io/allure/#_installing_a_commandline))
 2) Run tests
 3) Type `allure generate report --clean && allure open allure-report`
-
