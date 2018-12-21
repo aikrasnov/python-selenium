@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/aikrasnov/python-selenium.svg?branch=master)](https://travis-ci.org/aikrasnov/python-selenium)
 ## How to run UI tests
 ### Local
 0) Install firefox, chrome and put theirs drivers in PATH ([chromedriver](http://chromedriver.chromium.org/), [geckodriver](https://github.com/mozilla/geckodriver/releases))
