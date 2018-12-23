@@ -19,3 +19,4 @@ node_modules/
 /.pytest_cache
 /report
 /allure-report
+/screenshots

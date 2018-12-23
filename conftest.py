@@ -1,5 +1,6 @@
 import os
 import pytest
+import datetime
 from selenium import webdriver
 
 AVAILABLE_BROWSERS = {
@@ -11,6 +12,7 @@ AVAILABLE_BROWSERS = {
 @pytest.fixture(scope="function")
 def driver(request, param):
     browser_type = request.config.getoption("--browser") or param
+    save_screen = request.config.getoption("--screenonfail") or param
 
     username = None
     access_key = None
@@ -35,7 +37,6 @@ def driver(request, param):
             browser = webdriver.Chrome(desired_capabilities=caps)
 
     elif AVAILABLE_BROWSERS["firefox"] in browser_type:
-        # caps.update({"pageLoadStrategy": "normal"})
         if has_sauce_lab:
             caps.update({"browserName": "firefox", "platform": "Windows 10", "version": "64.0"})
             browser = webdriver.Remote(desired_capabilities=caps, command_executor=command_executor)
@@ -46,6 +47,15 @@ def driver(request, param):
         raise RuntimeError(f"Unknown browser ${browser_type}")
 
     yield browser
+
+    if request.node.rep_call.failed and save_screen:
+        screenshots_path = f"./screenshots/{browser_type}/{request.node.name}/"
+        if not os.path.exists(screenshots_path):
+            os.makedirs(screenshots_path)
+
+        now = datetime.datetime.now()
+        browser.save_screenshot(f"{screenshots_path}{now.day}-{now.month}-{now.year}.png")
+
     browser.quit()
 
 
@@ -65,7 +75,13 @@ def pytest_addoption(parser):
 
     parser.addoption("--allbrowsers",
                      default=False,
+                     action="store_true",
                      help="Run tests in all available browsers")
+
+    parser.addoption("--screenonfail",
+                     default=False,
+                     action="store_true",
+                     help="Save screenshot on test fail")
 
 
 def pytest_generate_tests(metafunc):
@@ -76,3 +92,16 @@ def pytest_generate_tests(metafunc):
 # https://automated-testing.info/t/pytest-krivo-otobrazhaet-kejsy-parametrizaczii-na-russkom/17908
 def pytest_make_parametrize_id(config, val):
     return repr(val)
+
+
+# https://docs.pytest.org/en/latest/example/simple.html#making-test-result-information-available-in-fixtures
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    # execute all other hooks to obtain the report object
+    outcome = yield
+    rep = outcome.get_result()
+
+    # set a report attribute for each phase of a call, which can
+    # be "setup", "call", "teardown"
+
+    setattr(item, "rep_" + rep.when, rep)
