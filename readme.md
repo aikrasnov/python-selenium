@@ -11,8 +11,11 @@
 2) Установить переменные окружения SAUCE_USERNAME and SAUCE_ACCESS_KEY
 3) Запустить тесты
 
+### Изменить количество ретраев
+`pytest -reruns number` ([подробности](https://pypi.org/project/pytest-rerunfailures/))
+
 ### Изменить количество параллельных тестов
-`pytest -n number`
+`pytest -n number` ([подробности](https://pypi.org/project/pytest-xdist/))
 
 ### Изменить браузер
 `pytest --browser firefox`
