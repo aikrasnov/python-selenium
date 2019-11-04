@@ -4,5 +4,5 @@ dist: xenial
 sudo: true
 script:
     - pip install pipenv
-    - pipenv install
+    - pipenv install --ignore-pipfile
     - pipenv run pytest
