@@ -25,7 +25,8 @@ def driver(request, param):
 
     has_sauce_lab = username and access_key
     caps = {}
-    command_executor = f"https://{username}:{access_key}@ondemand.saucelabs.com/wd/hub"
+
+    command_executor = f"https://{username}:{access_key}@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
 
     if AVAILABLE_BROWSERS["chrome"] in browser_type:
         # use "none" only for Chrome, because there some trouble in geckrodriver with this strategy
