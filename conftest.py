@@ -1,51 +1,26 @@
 import os
 import pytest
 import datetime
-from selenium import webdriver
 
-AVAILABLE_BROWSERS = {
-    "chrome": "chrome",
-    "firefox": "firefox"
-}
+from config.config import Config
+from src.selenium.browser_factory import BrowserFactory
+from src.selenium.browsers.available_browsers import AvailableBrowsers
+from src.selenium.capabilities import Capabilities
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="class")
 def driver(request, param):
-    browser_type = request.config.getoption("--browser") or param
-    save_screen = request.config.getoption("--screenonfail") or param
+    # use param if its parametrized run
+    browser_type = Config.browser or param
+    save_screen = Config.browser
 
-    username = None
-    access_key = None
+    capabilities = Capabilities(browser_type, version="", page_load_strategy="none")
 
-    try:
-        username = os.environ["SAUCE_USERNAME"]
-        access_key = os.environ["SAUCE_ACCESS_KEY"]
-    except KeyError:
-        pass
+    if Config.has_saucelabs_connect:
+        command_executor = Config.saucelabs_connection_string
+        capabilities.set_capability(Capabilities.command_executor, command_executor)
 
-    has_sauce_lab = username and access_key
-    caps = {}
-    command_executor = f"https://{username}:{access_key}@ondemand.saucelabs.com/wd/hub"
-
-    if AVAILABLE_BROWSERS["chrome"] in browser_type:
-        # use "none" only for Chrome, because there some trouble in geckrodriver with this strategy
-        caps.update({"pageLoadStrategy": "none"})
-        if has_sauce_lab:
-            caps.update({"browserName": "chrome", "platform": "Windows 10", "version": "71.0"})
-            browser = webdriver.Remote(desired_capabilities=caps, command_executor=command_executor)
-        else:
-            browser = webdriver.Chrome(desired_capabilities=caps)
-
-    elif AVAILABLE_BROWSERS["firefox"] in browser_type:
-        if has_sauce_lab:
-            caps.update({"browserName": "firefox", "platform": "Windows 10", "version": "64.0"})
-            browser = webdriver.Remote(desired_capabilities=caps, command_executor=command_executor)
-        else:
-            browser = webdriver.Firefox(desired_capabilities=caps)
-
-    else:
-        raise RuntimeError(f"Unknown browser ${browser_type}")
-
+    browser = BrowserFactory.get_driver(capabilities)
     yield browser
 
     if request.node.rep_call.failed and save_screen:
@@ -59,7 +34,7 @@ def driver(request, param):
     browser.quit()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="class")
 def param(request):
     # we don"t have request.param when not parametrize tests with pytest_generate_tests
     try:
@@ -71,22 +46,48 @@ def param(request):
 def pytest_addoption(parser):
     parser.addoption("--browser",
                      action="append",
-                     help=f"Browser. Valid options are {AVAILABLE_BROWSERS.keys()}")
+                     help=f"Browser. Valid options are {AvailableBrowsers.get_available_browsers()}")
 
-    parser.addoption("--allbrowsers",
+    parser.addoption("--all_browsers",
                      default=False,
                      action="store_true",
                      help="Run tests in all available browsers")
 
-    parser.addoption("--screenonfail",
+    parser.addoption("--browser_version",
+                     default="Windows",
+                     action="store_true",
+                     help="Browsers version for run tests")
+
+    parser.addoption("--platform",
+                     default="Windows",
+                     action="store_true",
+                     help="OS where run tests")
+
+    parser.addoption("--screen_on_fail",
                      default=False,
                      action="store_true",
                      help="Save screenshot on test fail")
 
+    parser.addoption("--base_url",
+                     default="https://go.mail.ru/",
+                     action="store_true",
+                     help="base url for tests")
+
+
+def pytest_configure(config):
+    Config.setup({
+        "base_url": config.getoption("--base_url"),
+        "screen_on_fail": config.getoption("--screen_on_fail"),
+        "browser": config.getoption("--browser"),
+        "all_browsers": config.getoption("--all_browsers"),
+        "browser_version": config.getoption("--browser_version"),
+        "platform": config.getoption("--platform"),
+    })
+
 
 def pytest_generate_tests(metafunc):
-    if metafunc.config.getoption("allbrowsers") and not metafunc.config.getoption("browser"):
-        metafunc.parametrize("param", AVAILABLE_BROWSERS.keys())
+    if Config.all_browser and not Config.browser:
+        metafunc.parametrize("param", AvailableBrowsers.get_available_browsers())
 
 
 # https://automated-testing.info/t/pytest-krivo-otobrazhaet-kejsy-parametrizaczii-na-russkom/17908
