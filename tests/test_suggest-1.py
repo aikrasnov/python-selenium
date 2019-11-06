@@ -6,6 +6,7 @@ import pytest
 @pytest.mark.parametrize("text", ["foobar", "бесплатно", "без регистрации", "中文"])
 @pytest.allure.testcase("http://test-tracker/suggest-1")
 @pytest.allure.feature("SUGGEST-1: Саджест должен появляться")
+@pytest.mark.debug
 def test_suggest_1(driver, text):
     page = MainPage(driver)
     page.open()
